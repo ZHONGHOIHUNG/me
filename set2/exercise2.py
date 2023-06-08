@@ -13,7 +13,7 @@ import string
 # E.g. det isn't a reserved word, it should be def
 def getLetter(index):
     the_alphabet = string.ascii_lowercase + " "
-    return the_alphabet(index) # <-- this should be using [] to index into a list
+    return the_alphabet[index] # <-- this should be using [] to index into a list
 
 
 def set2exersise2(): # this is semi-right
