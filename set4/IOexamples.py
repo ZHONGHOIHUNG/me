@@ -62,6 +62,16 @@ who_is_cool("../ben_is_cool.txt")
 who_is_cool("Set4/lazyduck.json")
 
 
+def who_is_cool(file_path):
+    """Read a file and print what it says."""
+    mode = "r"  # from the docs
+    with open(file_path, mode, encoding="urf-8") as history_book:
+        response = history_book.read()
+        message = "historians have recorded that:\n\t"
+        print(message + response)
+        history_book.close()
+
+
 # some JSON examples:
 
 
