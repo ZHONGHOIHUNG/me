@@ -37,10 +37,20 @@ def get_some_details():
          dictionary, you'll need integer indeces for lists, and named keys for
          dictionaries.
     """
-    json_data = open(LOCAL + "/lazyduck.json").read()
-
+    with open("set4/lazyduck.json") as file:
+        json_data = file.read()
     data = json.loads(json_data)
-    return {"lastName": None, "password": None, "postcodePlusID": None}
+    person = data["results"][0]
+    last_name = person["name"]["last"]
+    password = person["login"]["password"]
+    postcode = person["location"]["postcode"]
+    id_value = int(person["id"]["value"])
+    postcode_plus_id = postcode + id_value
+    return {
+        "lastName": last_name,
+        "password": password,
+        "postcodePlusID": postcode_plus_id,
+    }
 
 
 def wordy_pyramid():
@@ -78,6 +88,16 @@ def wordy_pyramid():
     TIP: to add an argument to a URL, use: ?argName=argVal e.g. &wordlength=
     """
     pyramid = []
+    for length in range(3, 21, 2):
+        url = f"https://us-central1-waldenpondpress.cloudfunctions.net/give_me_a_word?wordlength={length}"
+        response = requests.get(url)
+        word = response.text
+        pyramid.append(word)
+    for length in range(20, 2, -2):
+        url = f"https://us-central1-waldenpondpress.cloudfunctions.net/give_me_a_word?wordlength={length}"
+        response = requests.get(url)
+        word = response.text
+        pyramid.append(word)
 
     return pyramid
 
@@ -101,7 +121,7 @@ def pokedex(low=1, high=5):
     r = requests.get(url)
     if r.status_code is 200:
         the_json = json.loads(r.text)
-
+        name = 5
     return {"name": None, "weight": None, "height": None}
 
 
