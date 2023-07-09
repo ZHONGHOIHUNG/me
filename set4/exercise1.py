@@ -125,9 +125,32 @@ def pokedex(low=1, high=5):
     return {"name": None, "weight": None, "height": None}
 
 
+import requests
+import json
+
+
+def pokedex(low=1, high=5):
+    tallest_pokemon = {"name": None, "weight": None, "height": None}
+    max_height = 0
+
+    for id in range(low, high + 1):
+        url = f"https://pokeapi.co/api/v2/pokemon/{id}"
+        r = requests.get(url)
+
+        if r.status_code == 200:
+            pokemon_data = json.loads(r.text)
+            height = pokemon_data["height"]
+            if height > max_height:
+                max_height = height
+                tallest_pokemon["name"] = pokemon_data["name"]
+                tallest_pokemon["weight"] = pokemon_data["weight"]
+                tallest_pokemon["height"] = height
+
+    return tallest_pokemon
+
+
 def diarist():
     """Read gcode and find facts about it.
-
     Read in Trispokedovetiles(laser).gcode and count the number of times the
     laser is turned on and off. That's the command "M10 P1".
     Write the answer (a number) to a file called 'lasers.pew' in the Set4 directory.
@@ -142,7 +165,21 @@ def diarist():
 
     NOTE: this function doesn't return anything. It has the _side effect_ of modifying the file system
     """
-    pass
+
+
+import os
+
+
+def diarist():
+    with open("set4/Trispokedovetiles(laser).gcode", "r") as gcode_file:
+        gcode = gcode_file.read()
+    count = 0
+    for line in gcode.splitlines():
+        if "M10 P1" in line:
+            count += 1
+    print("Count:", count)
+    with open("set4/lasers.pew", "w") as output_file:
+        output_file.write(str(count))
 
 
 if __name__ == "__main__":
